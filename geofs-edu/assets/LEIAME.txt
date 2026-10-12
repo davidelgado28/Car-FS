@@ -1,1 +1,0 @@
-Coloque aqui seu modelo como aircraft.glb (nariz apontando para +X).
