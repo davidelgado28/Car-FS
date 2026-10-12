@@ -8,8 +8,7 @@ export const CONFIG = {
   start: { lat: -22.93, lon: -43.10, alt: 900, headingDeg: 270, speed: 54 },
 
   modelUrls: [
-    "assets/aircraft.glb",
-    "https://raw.githubusercontent.com/CesiumGS/cesium/main/Apps/SampleData/models/CesiumAir/Cesium_Air.glb",
+    "assets/A320.glb",
   ],
   modelScale: 1.0,
   modelYawOffsetDeg: 0, 
