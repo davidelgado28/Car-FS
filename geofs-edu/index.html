@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>CarFS - Simulador de voo</title>
+  <link rel="stylesheet" href="https://cesium.com/downloads/cesiumjs/releases/1.123/Build/Cesium/Widgets/widgets.css" />
+  <link rel="stylesheet" href="css/style.css" />
+  <script src="https://cesium.com/downloads/cesiumjs/releases/1.123/Build/Cesium/Cesium.js"></script>
+</head>
+<body>
+  <div id="cesiumContainer"></div>
+  <div id="loading">Carregando globo e terreno…</div>
+  <div id="banner"></div>
+  <div id="warn"></div>
+
+  <div id="help">
+    <b>Controles</b> <small>(H oculta)</small><br />
+    ↑/↓ profundor (↓ = puxa, nariz sobe) · ←/→ ailerons<br />
+    Q/E leme · W/S motor · B ou Espaço freio<br />
+    F/V flaps · T/G compensador (trim)<br />
+    C câmera · I modo educativo · P pausa · R reiniciar
+  </div>
+
+  <aside id="edu">
+    <button id="edu-toggle">🎓 Modo Educativo</button>
+    <div id="edu-body">
+      <canvas id="force-canvas" width="300" height="230"></canvas>
+      <div class="legend">
+        <span style="color:#4da3ff">■ Sustentação</span>
+        <span style="color:#ff5c5c">■ Peso</span>
+        <span style="color:#5cff8a">■ Empuxo</span>
+        <span style="color:#ffb347">■ Arrasto</span>
+      </div>
+      <div class="grid">
+        <span>Sustentação L</span><b id="e-L">0</b>
+        <span>Peso W</span><b id="e-W">0</b>
+        <span>Empuxo T</span><b id="e-T">0</b>
+        <span>Arrasto D</span><b id="e-D">0</b>
+        <span>Fator de carga</span><b id="e-n">0</b>
+        <span>Ângulo de ataque α</span><b id="e-a">0</b>
+        <span>CL / CD</span><b id="e-c">0</b>
+        <span>Densidade ρ</span><b id="e-rho">0</b>
+        <span>Pressão dinâmica q</span><b id="e-q">0</b>
+        <span>Vel. de stall (IAS)</span><b id="e-vs">0</b>
+      </div>
+      <p id="edu-text"></p>
+      <p class="formula">L = ½·ρ·V²·S·C<sub>L</sub> &nbsp; D = ½·ρ·V²·S·C<sub>D</sub><br />C<sub>D</sub> = C<sub>D0</sub> + k·C<sub>L</sub>²</p>
+    </div>
+  </aside>
+
+  <div id="hud">
+    <div class="inst ai"><div id="ai-horizon"></div><div class="ai-plane"></div></div>
+    <div class="inst"><label>VELOC. (kt)</label><b id="ias">0</b><small>TAS <span id="tas">0</span> kt</small></div>
+    <div class="inst"><label>ALTITUDE (ft)</label><b id="alt-ft">0</b><small><span id="alt-m">0</span> m · AGL <span id="agl">0</span> ft</small></div>
+    <div class="inst"><label>VARIÔMETRO (ft/min)</label><b id="vs">0</b></div>
+    <div class="inst">
+      <label>RUMO</label>
+      <div class="compass"><div id="rose"></div><div class="lubber"></div></div>
+      <b id="hdg">000°</b>
+    </div>
+    <div class="inst"><label>POTÊNCIA</label><b id="thr">0%</b>
+      <div class="bar"><div id="thr-bar"></div></div>
+      <small>FLAPS <span id="flaps">0°</span> · TRIM <span id="trim">0</span></small>
+    </div>
+  </div>
+  <script type="module" src="js/main.js"></script>
+</body>
+</html>
