@@ -7,11 +7,18 @@ export const CONFIG = {
   invertPitchKeys: true,              
   start: { lat: -22.93, lon: -43.10, alt: 900, headingDeg: 270, speed: 54 },
 
-  modelUrls: [
-    "assets/A320.glb",
-  ],
   modelScale: 1.0,
-  modelYawOffsetDeg: 0, 
+  
+  modelOffsets: {
+    "assets/A318.glb": { yaw: 0, pitch: 0, roll: 0 },
+    "assets/A319.glb": { yaw: 0, pitch: 0, roll: 0 },
+    "assets/A320.glb": { yaw: 0, pitch: 0, roll: 0 },
+    "assets/A321.glb": { yaw: 0, pitch: 0, roll: 0 },
+    "assets/A350.glb": { yaw: 0, pitch: 0, roll: 0 },
+    "assets/A380.glb": { yaw: 0, pitch: 0, roll: 0 },
+    "assets/B737.glb": { yaw: 90, pitch: 0, roll: 0 }, 
+    "assets/B787.glb": { yaw: 90, pitch: 0, roll: 0 }
+  },
 
   camera: {
     chaseBack: 17, chaseUp: 4.5, chaseSmooth: 5, lookAhead: 25,
