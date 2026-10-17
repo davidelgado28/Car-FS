@@ -42,8 +42,7 @@ export function computePose(model) {
 export class AircraftVisual {
   constructor(scene) {
     this.scene = scene; this.model = null; this.parts = []; this.hiddenCockpit = false; this.modelReady = false;
-    this.pose = new Cesium.Matrix4(); this.tmp = new Cesium.Matrix4();
-    this.yawOffset = Cesium.Matrix4.fromRotationTranslation(Cesium.Matrix3.fromRotationZ(Cesium.Math.toRadians(CONFIG.modelYawOffsetDeg)));
+    this.pose = new Cesium.Matrix4(); this.currentUrl = "";
     this._buildFallback();
   }
 
@@ -70,11 +69,20 @@ export class AircraftVisual {
   }
 
   async load(url) {
+    this.currentUrl = url;
     if (this.model) {
       this.scene.primitives.remove(this.model);
       this.model = null;
     }
     this.modelReady = false;
+
+    const offsetCfg = CONFIG.modelOffsets[url] || { yaw: 0, pitch: 0, roll: 0 };
+    const h = Cesium.Math.toRadians(offsetCfg.yaw);
+    const p = Cesium.Math.toRadians(offsetCfg.pitch);
+    const r = Cesium.Math.toRadians(offsetCfg.roll);
+    const hpr = new Cesium.HeadingPitchRoll(h, p, r);
+    this.orientationOffset = Cesium.Matrix4.fromRotationTranslation(Cesium.Matrix3.fromHeadingPitchRoll(hpr));
+
     try {
       const model = await Cesium.Model.fromGltfAsync({ url, scale: CONFIG.modelScale });
       this.scene.primitives.add(model);
@@ -89,13 +97,16 @@ export class AircraftVisual {
       return false; 
     }
   }
-
   _showFallback(on) { this.parts.forEach((p) => (p.prim.show = on && !this.hiddenCockpit)); if (this.model) this.model.show = !on && !this.hiddenCockpit; }
   setHiddenForCockpit(h) { this.hiddenCockpit = h; this._showFallback(!this.modelReady); }
 
   setPose(position, rot) {
     Cesium.Matrix4.fromRotationTranslation(rot, position, this.pose);
-    if (this.model) Cesium.Matrix4.multiply(this.pose, this.yawOffset, this.model.modelMatrix);
-    for (const p of this.parts) Cesium.Matrix4.multiply(this.pose, p.offset, p.prim.modelMatrix);
+    if (this.model) {
+      Cesium.Matrix4.multiply(this.pose, this.orientationOffset, this.model.modelMatrix);
+    }
+    for (const p of this.parts) {
+      Cesium.Matrix4.multiply(this.pose, p.offset, p.prim.modelMatrix);
+    }
   }
 }
