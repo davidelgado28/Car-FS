@@ -13,7 +13,12 @@ import { HUD } from "./hud.js";
   else if (!terrainOk) { banner.style.display = "block"; banner.textContent = "Não foi possível carregar o World Terrain (verifique o token)."; }
 
   const visual = new AircraftVisual(viewer.scene);
-  visual.load(CONFIG.modelUrls); 
+  const planeSelect = document.getElementById("plane-select");
+  await visual.load(planeSelect.value);
+
+  planeSelect.onchange = async (e) => {
+    await visual.load(e.target.value);
+  };
 
   const model = new FlightModel(AIRCRAFT);
   model.reset(CONFIG.start);
@@ -29,7 +34,7 @@ import { HUD } from "./hud.js";
     flapsUp: () => (model.flaps = clamp(model.flaps - 1, 0, AIRCRAFT.flaps.length - 1)),
     trimUp: () => (model.trim = clamp(model.trim + 0.02, -0.5, 0.5)),
     trimDown: () => (model.trim = clamp(model.trim - 0.02, -0.5, 0.5)),
-    edu: () => hud.toggleEdu(), help: () => hud.toggleHelp(),
+    help: () => hud.toggleHelp(),
   }, CONFIG.invertPitchKeys);
 
   const globe = viewer.scene.globe;

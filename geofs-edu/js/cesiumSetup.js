@@ -25,7 +25,8 @@ export async function createViewer() {
   scene.fog.enabled = true;
   viewer.clock.currentTime = Cesium.JulianDate.fromIso8601(CONFIG.simTimeUtc);
   viewer.clock.shouldAnimate = false;
-  scene.screenSpaceCameraController.enableInputs = false; 
+  
+  scene.screenSpaceCameraController.enableInputs = true; 
   viewer.cesiumWidget.screenSpaceEventHandler.removeInputAction(Cesium.ScreenSpaceEventType.LEFT_DOUBLE_CLICK);
   return { viewer, terrainOk, hasToken };
 }
@@ -68,20 +69,25 @@ export class AircraftVisual {
     }
   }
 
-  async load(urls) {
-    for (const url of urls) {
-      try {
-        const model = await Cesium.Model.fromGltfAsync({ url, scale: CONFIG.modelScale });
-        this.scene.primitives.add(model);
-        model.errorEvent.addEventListener((e) => { console.warn("Erro no modelo:", e); this._showFallback(true); });
-        model.readyEvent.addEventListener(() => { this.modelReady = true; this._showFallback(false); });
-        this.model = model;
-        console.info("Modelo 3D carregado de", url);
-        return true;
-      } catch (e) { console.warn("Modelo indisponível:", url, e); }
+  async load(url) {
+    if (this.model) {
+      this.scene.primitives.remove(this.model);
+      this.model = null;
     }
-    console.warn("Nenhum GLB carregou: usando aeronave de fallback.");
-    return false;
+    this.modelReady = false;
+    try {
+      const model = await Cesium.Model.fromGltfAsync({ url, scale: CONFIG.modelScale });
+      this.scene.primitives.add(model);
+      model.errorEvent.addEventListener((e) => { console.warn("Erro no modelo:", e); this._showFallback(true); });
+      model.readyEvent.addEventListener(() => { this.modelReady = true; this._showFallback(false); });
+      this.model = model;
+      console.info("Modelo 3D carregado de", url);
+      return true;
+    } catch (e) { 
+      console.warn("Modelo indisponível:", url, e); 
+      this._showFallback(true);
+      return false; 
+    }
   }
 
   _showFallback(on) { this.parts.forEach((p) => (p.prim.show = on && !this.hiddenCockpit)); if (this.model) this.model.show = !on && !this.hiddenCockpit; }

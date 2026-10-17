@@ -19,35 +19,22 @@
     ↑/↓ profundor (↓ = puxa, nariz sobe) · ←/→ ailerons<br />
     Q/E leme · W/S motor · B ou Espaço freio<br />
     F/V flaps · T/G compensador (trim)<br />
-    C câmera · I modo educativo · P pausa · R reiniciar
+    C câmera · P pausa · R reiniciar
   </div>
 
-  <aside id="edu">
-    <button id="edu-toggle">🎓 Modo Educativo</button>
-    <div id="edu-body">
-      <canvas id="force-canvas" width="300" height="230"></canvas>
-      <div class="legend">
-        <span style="color:#4da3ff">■ Sustentação</span>
-        <span style="color:#ff5c5c">■ Peso</span>
-        <span style="color:#5cff8a">■ Empuxo</span>
-        <span style="color:#ffb347">■ Arrasto</span>
-      </div>
-      <div class="grid">
-        <span>Sustentação L</span><b id="e-L">0</b>
-        <span>Peso W</span><b id="e-W">0</b>
-        <span>Empuxo T</span><b id="e-T">0</b>
-        <span>Arrasto D</span><b id="e-D">0</b>
-        <span>Fator de carga</span><b id="e-n">0</b>
-        <span>Ângulo de ataque α</span><b id="e-a">0</b>
-        <span>CL / CD</span><b id="e-c">0</b>
-        <span>Densidade ρ</span><b id="e-rho">0</b>
-        <span>Pressão dinâmica q</span><b id="e-q">0</b>
-        <span>Vel. de stall (IAS)</span><b id="e-vs">0</b>
-      </div>
-      <p id="edu-text"></p>
-      <p class="formula">L = ½·ρ·V²·S·C<sub>L</sub> &nbsp; D = ½·ρ·V²·S·C<sub>D</sub><br />C<sub>D</sub> = C<sub>D0</sub> + k·C<sub>L</sub>²</p>
-    </div>
-  </aside>
+  <div id="aircraft-selector">
+    <label for="plane-select"><b>Avião:</b></label>
+    <select id="plane-select">
+      <option value="assets/A318.glb">Airbus A318</option>
+      <option value="assets/A319.glb">Airbus A319</option>
+      <option value="assets/A320.glb" selected>Airbus A320</option>
+      <option value="assets/A321.glb">Airbus A321</option>
+      <option value="assets/A350.glb">Airbus A350</option>
+      <option value="assets/A380.glb">Airbus A380</option>
+      <option value="assets/B737.glb">Boeing 737</option>
+      <option value="assets/B787.glb">Boeing 787</option>
+    </select>
+  </div>
 
   <div id="hud">
     <div class="inst ai"><div id="ai-horizon"></div><div class="ai-plane"></div></div>

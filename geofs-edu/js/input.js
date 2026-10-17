@@ -11,7 +11,7 @@ export class InputManager {
       this.keys.add(e.code);
       if (e.repeat) return;
       const map = { KeyC: "camera", KeyR: "reset", KeyP: "pause", KeyF: "flapsDown", KeyV: "flapsUp",
-        KeyT: "trimUp", KeyG: "trimDown", KeyI: "edu", KeyH: "help" };
+        KeyT: "trimUp", KeyG: "trimDown", KeyH: "help" };
       const fn = map[e.code]; if (fn && this.h[fn]) this.h[fn]();
     });
     addEventListener("keyup", (e) => this.keys.delete(e.code));
@@ -25,7 +25,7 @@ export class InputManager {
   }
 
   update(dt) {
-    const pitchT = this._axis("ArrowUp", "ArrowDown") * (this.invert ? 1 : -1); // +1 = nariz sobe
+    const pitchT = this._axis("ArrowUp", "ArrowDown") * (this.invert ? 1 : -1); 
     this.v.pitch = this._ramp(this.v.pitch, pitchT, dt, 1.2);
     this.v.roll = this._ramp(this.v.roll, this._axis("ArrowLeft", "ArrowRight"), dt, 2.5);
     this.v.yaw = this._ramp(this.v.yaw, this._axis("KeyQ", "KeyE"), dt, 2.5);
