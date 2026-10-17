@@ -2,21 +2,38 @@ const { Cartesian3, Matrix3 } = Cesium;
 
 export class CameraController {
   constructor(viewer, visual, cfg) {
-    this.viewer = viewer; this.visual = visual; this.cfg = cfg; this.mode = "chase";
+    this.viewer = viewer; this.visual = visual; this.cfg = cfg; 
+    this.mode = "chase";
     this._apply(); this.snap();
   }
-  get label() { return this.mode === "chase" ? "EXTERNA" : "COCKPIT"; }
+  
+  get label() { 
+    if (this.mode === "chase") return "EXTERNA";
+    if (this.mode === "cockpit") return "COCKPIT";
+    return "LIVRE"; 
+  }
+
   snap() { this.off = null; this.up = null; } 
 
-  toggle() { this.mode = this.mode === "chase" ? "cockpit" : "chase"; this._apply(); this.snap(); }
+  toggle() { 
+    if (this.mode === "chase") this.mode = "cockpit";
+    else if (this.mode === "cockpit") this.mode = "free";
+    else this.mode = "chase";
+    
+    this._apply(); 
+    this.snap(); 
+  }
   _apply() {
     const cp = this.mode === "cockpit";
     this.viewer.camera.frustum.fov = Cesium.Math.toRadians(cp ? this.cfg.fovCockpit : this.cfg.fovChase);
     this.visual.setHiddenForCockpit(cp && this.cfg.hideModelInCockpit);
   }
-
   /** @param pos posição ECEF da aeronave  @param rot rotação corpo→ECEF */
   update(dt, pos, rot) {
+    if (this.mode === "free") {
+      return;
+    }
+
     const cfg = this.cfg;
     const body = (x, y, z) => Matrix3.multiplyByVector(rot, new Cartesian3(x, y, z), new Cartesian3());
     let camPos, dir, up;
