@@ -7,7 +7,7 @@ export class FlightModel {
   constructor(ac) {
     this.ac = ac;
     this.telemetry = {};
-    this.reset({ lat: 0, lon: 0, alt: 1000, headingDeg: 0, speed: 50 });
+    this.reset({ lat: 0, lon: 0, alt: 1000, headingDeg: 0, speed: 67 });
   }
 
   reset(s) {
@@ -52,12 +52,6 @@ export class FlightModel {
     return { CL, CD, over };
   }
 
-  /**
-   * Avança a simulação dt segundos.
-   * @param c  controles {pitch, roll, yaw, brake}  (−1..1)
-   * @param groundH  altura elipsoidal do terreno sob a aeronave (m)
-   * @param slope    inclinação do terreno à frente (m/m, + = subindo)
-   */
   step(dt, c, groundH, slope = 0) {
     const ac = this.ac, m = ac.mass, W = m * G0, S = ac.wingArea;
     const floor = groundH + ac.gearHeight;
@@ -79,7 +73,6 @@ export class FlightModel {
     const alpha = V > 1 ? Math.atan2(-vU, fwd) : 0;
     const beta = V > 1 ? Math.atan2(vR, fwd) : 0;
     const qbar = 0.5 * rho * V * V; 
-
     const { CL, CD, over } = this._aero(alpha);
     const Lmag = CL * qbar * S;
     const Dmag = CD * qbar * S;
@@ -95,11 +88,13 @@ export class FlightModel {
     this.vel = v3.add(this.vel, v3.scale(Fsum, dt / m)); 
 
     const auth = clamp(qbar / ac.qRef, 0, 1.4);
+    const dampAuth = Math.max(0.4, auth); 
     const elev = clamp(c.pitch + this.trim, -1, 1);
     const r = this.rates;
-    r.q += (ac.Kelev * elev * auth - ac.Kqd * r.q - ac.Kalpha * (alpha - ac.alphaTrim) * auth) * dt;
-    r.p += (ac.Kail * c.roll * Math.min(auth, 1.2) - ac.Kpd * r.p) * dt;
-    r.r += (ac.Krud * c.yaw * auth - ac.Krd * r.r + ac.Kbeta * beta * auth) * dt;
+
+    r.q += (ac.Kelev * elev * auth - ac.Kqd * r.q * dampAuth - ac.Kalpha * (alpha - ac.alphaTrim) * auth) * dt;
+    r.p += (ac.Kail * c.roll * Math.min(auth, 1.2) - ac.Kpd * r.p * dampAuth) * dt;
+    r.r += (ac.Krud * c.yaw * auth - ac.Krd * r.r * dampAuth + ac.Kbeta * beta * auth) * dt;
 
     const dF = v3.add(v3.scale(U, r.q), v3.scale(R, r.r));
     const dR = v3.add(v3.scale(U, -r.p), v3.scale(F, -r.r));
@@ -132,12 +127,12 @@ export class FlightModel {
         if (this.vel[2] < 0) this.vel[2] = 0; 
         let psi = e.yaw, th = clamp(e.pitch, 0, ac.maxGroundPitch);
         const liftFrac = clamp(Lmag / W, 0, 1);
-        if (liftFrac < 0.6) th *= Math.exp(-2 * dt * (1 - liftFrac / 0.6));
+        if (liftFrac < 0.6) th *= Math.exp(-3 * dt * (1 - liftFrac / 0.6));
         if (th <= 0 && r.q < 0) r.q = 0;
         const vh = Math.hypot(this.vel[0], this.vel[1]);
         psi += (c.yaw * ac.steerRate) * clamp(vh / 8, 0, 1) * dt; 
         this.setAttitude(psi, th, 0);
-        r.p = 0; r.r = 0;
+        r.p *= 0.2; r.r *= 0.2;
         const h = [Math.sin(psi), Math.cos(psi)];
         let vf = this.vel[0] * h[0] + this.vel[1] * h[1];
         const N = clamp(1 - Lmag / W, 0, 1);
@@ -163,6 +158,7 @@ export class FlightModel {
       ...this._angles(),
     };
   }
+
   _angles() {
     const e = this.euler();
     return { heading: (e.yaw * R2D + 360) % 360, pitch: e.pitch, roll: e.roll };
