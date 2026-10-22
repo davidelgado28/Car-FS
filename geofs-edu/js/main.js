@@ -71,7 +71,10 @@ import { HUD } from "./hud.js";
     }
     const { position, rot } = computePose(model);
     visual.setPose(position, rot);
-    cams.update(ui.paused ? 0 : dt, position, rot);
+    
+    const hdgRad = model.telemetry.heading ? (model.telemetry.heading * Math.PI) / 180 : 0;
+    cams.update(ui.paused ? 0 : dt, position, rot, hdgRad);
+    
     hud.update(model.telemetry, model, ui);
   });
-})();
+})();    
