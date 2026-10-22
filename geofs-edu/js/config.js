@@ -21,9 +21,9 @@ export const CONFIG = {
   },
 
   camera: {
-    chaseBack: 17, chaseUp: 4.5, chaseSmooth: 5, lookAhead: 25,
-    cockpit: [1.6, 0, 0.9], 
-    fovChase: 60, fovCockpit: 85, hideModelInCockpit: true,
+    chaseBack: 22, chaseUp: 4.5, chaseSmooth: 4.0, lookAhead: 25,
+    cockpit: [1.8, 0, 0.85], 
+    fovChase: 60, fovCockpit: 75, hideModelInCockpit: true,
   },
 };
 
