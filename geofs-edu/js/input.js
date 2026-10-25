@@ -10,7 +10,9 @@ export class InputManager {
       if (block.includes(e.code)) e.preventDefault();
       this.keys.add(e.code);
       if (e.repeat) return;
-      const map = { KeyC: "camera", KeyR: "reset", KeyP: "pause", KeyF: "flapsDown", KeyV: "flapsUp",
+      const map = { KeyC: "camera", Digit1: "cam1", Digit2: "cam2", Digit3: "cam3", Digit4: "cam4",
+        Numpad1: "cam1", Numpad2: "cam2", Numpad3: "cam3", Numpad4: "cam4",
+        KeyR: "reset", KeyP: "pause", KeyF: "flapsDown", KeyV: "flapsUp",
         KeyT: "trimUp", KeyG: "trimDown", KeyH: "help" };
       const fn = map[e.code]; if (fn && this.h[fn]) this.h[fn]();
     });
