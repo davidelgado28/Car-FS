@@ -28,6 +28,10 @@ import { HUD } from "./hud.js";
 
   const input = new InputManager({
     camera: () => cams.toggle(),
+    cam1: () => cams.setMode(0),
+    cam2: () => cams.setMode(1),
+    cam3: () => cams.setMode(2),
+    cam4: () => cams.setMode(3),
     reset: () => { model.reset(CONFIG.start); cams.snap(); },
     pause: () => (ui.paused = !ui.paused),
     flapsDown: () => (model.flaps = clamp(model.flaps + 1, 0, AIRCRAFT.flaps.length - 1)),
@@ -72,9 +76,9 @@ import { HUD } from "./hud.js";
     const { position, rot } = computePose(model);
     visual.setPose(position, rot);
     
-    const hdgRad = model.telemetry.heading ? (model.telemetry.heading * Math.PI) / 180 : 0;
-    cams.update(ui.paused ? 0 : dt, position, rot, hdgRad);
+    const hdgRad = ((model.telemetry.heading || 0) * Math.PI) / 180;
+    cams.update(ui.paused ? 0 : dt, position, rot, hdgRad, model);
     
-    hud.update(model.telemetry, model, ui);
+    hud.update(model.telemetry, model, ui, cams.label);
   });
 })();    
