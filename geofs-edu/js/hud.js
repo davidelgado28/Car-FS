@@ -12,7 +12,7 @@ export class HUD {
   toggleHelp() { $("help").classList.toggle("hidden"); }
   _set(id, v) { v = String(v); if (this.cache[id] !== v) { this.cache[id] = v; $(id).textContent = v; } }
 
-  update(t, m, ui) {
+  update(t, m, ui, camLabel) {
     this._set("ias", Math.round(t.ias * MS_TO_KT));
     this._set("tas", Math.round(t.V * MS_TO_KT));
     this._set("alt-ft", Math.round(m.alt * M_TO_FT));
@@ -35,5 +35,7 @@ export class HUD {
     else if (t.stalled || t.stallWarn) { msg = t.stalled ? "STALL!" : "ALERTA DE STALL"; cls = "stall"; }
     if (w.textContent !== msg) { w.textContent = msg; w.style.whiteSpace = "pre"; }
     w.className = cls;
+
+    this._set("cammode", "CÂMERA: " + (camLabel || "Externa"));
   }
 }
