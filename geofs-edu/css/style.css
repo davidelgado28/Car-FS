@@ -1,6 +1,6 @@
 :root { --fg:#d8f3ff; --accent:#5cff8a; --bg:rgba(8,16,28,.72); --line:rgba(120,200,255,.35); }
 * { box-sizing: border-box; }
-html, body { margin:0; height:100%; overflow:hidden; background:#000; font-family: ui-monospace, Menlo, Consolas, monospace; color:var(--fg); }
+html, body { margin:0; height:100%; overflow:hidden; background:#000; font-family: Arial; color:var(--fg); }
 #cesiumContainer { position:fixed; inset:0; }
 .cesium-viewer-bottom { display:none; } 
 
