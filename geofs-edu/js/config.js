@@ -5,7 +5,7 @@ export const CONFIG = {
 
   simTimeUtc: "2026-06-21T15:00:00Z",
   invertPitchKeys: true,
-  start: { lat: -22.93, lon: -43.10, alt: 900, headingDeg: 270, speed: 54 },
+  start: { lat: -22.93, lon: -43.10, alt: 900, headingDeg: 270, speed: 100 },
 
   modelScale: 1.0,
 
