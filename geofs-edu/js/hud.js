@@ -44,7 +44,7 @@ export class HUD {
     const w = $("warn"); 
     let msg = "", cls = "info"; 
     
-    if (t.crashed) msg = `ACIDENTE — ${t.crashReason}\nPressione R para reiniciar`; 
+    if (t.crashed) msg = `ACIDENTE! ${t.crashReason}\nPressione R para reiniciar`; 
     else if (ui.paused) msg = "PAUSADO"; 
     else if (t.stalled || t.stallWarn) { 
       msg = t.stalled ? "STALL!" : "ALERTA DE STALL"; 
