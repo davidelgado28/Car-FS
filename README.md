@@ -1,20 +1,20 @@
 # Car-FS
 
-O **Car-FS** é um simulador de voo online, que roda no navegador. Ele é inspirado no **geo-fs**, mas com uma proposta totalmente open-source. Ele tem uma mecânica bem simples; importa um pacote de javascript que contém todo o globo terrestre em 3D, renderizando tudo, e mantendo tudo em **60 FPS**. Está hospedado na vercel e roda em qualquer navegador.
+**Car-FS** is an online flight simulator that runs directly in your web browser. Inspired by **Geo-FS**, it is built with a fully open-source approach. It features straightforward mechanics: it imports a JavaScript package containing a 3D model of the entire Earth, rendering the environment while maintaining a consistent **60 FPS**. It is hosted on Vercel and is compatible with any web browser.
 
 ---
 
-## Engenharia do software
+## Software Engineering
 
-O **Car-FS** tem uma estrutura simples, tendo um diretório principal, sendo o **geofs-edu**, justamente por ser uma inspiração educacional do modelo já existente, que se subdivide em três diretórios menores, o **assets**, o **css** e o **js**, além disso, há o **index.html**, responsável por criar o site hospedeiro. 
+**Car-FS** has a simple structure. The main directory—named **geofs-edu**, reflecting its educational inspiration—is subdivided into three subdirectories: **assets**, **css**, and **js**. Additionally, there is an **index.html** file, which serves as the entry point for the web application.
 
-- Dentro da pasta **assets**, há os modelos das aeronaves presentes no jogo. Obs: Os modelos foram obtidos de outros projetos open-source disponíveis no github, além de modelos gratuitos e open-source disponíveis na web.
-- Já dentro da pasta **css**, está contido o script **style.css**, responsável por dar cores vivas aos alertas de colisão, além das informações básicas do voo.
-- Por último, há a pasta **js**, que abriga todos cálculos, ponto de visão das câmeras, a física da atmosfera (tipo quando o nariz do avião é colocado para baixo, e o avião, desce e ganha velocidade), além da importação do globo terrestre.
+- The **assets** folder contains the aircraft models used in the game. Note: These models were sourced from other open-source projects on GitHub, as well as from various free, open-source resources available online.
+- The **css** folder contains the **style.css** file, which handles the styling—such as the vibrant colors used for collision alerts and the display of essential flight information.
+- Finally, the **js** folder houses the core logic, including calculations, camera viewpoints, atmospheric physics (such as how an aircraft descends and gains speed when its nose is pointed downward), and the integration of the 3D globe.
 
-## Tecnologias
+## Technologies
 
 - HTML5
 - CSS3
-- Javacript
+- JavaScript
 - Vercel
