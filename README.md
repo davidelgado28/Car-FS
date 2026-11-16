@@ -6,7 +6,7 @@
 
 ## Software Engineering
 
-**Car-FS** has a simple structure. The main directory—named **geofs-edu**, reflecting its educational inspiration—is subdivided into three subdirectories: **assets**, **css**, and **js**. Additionally, there is an **index.html** file, which serves as the entry point for the web application.
+**Car-FS** has a simple structure. The main directory is named **geofs-edu**, reflecting its educational inspiration. It is subdivided into three subdirectories: **assets**, **css**, and **js**. Additionally, there is an **index.html** file, which serves as the entry point for the web application.
 
 - The **assets** folder contains the aircraft models used in the game. Note: These models were sourced from other open-source projects on GitHub, as well as from various free, open-source resources available online.
 - The **css** folder contains the **style.css** file, which handles the styling—such as the vibrant colors used for collision alerts and the display of essential flight information.
