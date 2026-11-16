@@ -1,6 +1,6 @@
 # Car-FS
 
-**Car-FS** is an online flight simulator that runs directly in your web browser. Inspired by **Geo-FS**, it is built with a fully open-source approach. It features straightforward mechanics: it imports a JavaScript package containing a 3D model of the entire Earth, rendering the environment while maintaining a consistent **60 FPS**. It is hosted on Vercel and is compatible with any web browser.
+**Car-FS** is a browser-based flight simulator inspired by **Geo-FS**, with keyboard flight controls, a 3D globe, terrain, and cockpit and external camera views. The project does not display advertisements.
 
 ---
 
@@ -8,9 +8,11 @@
 
 **Car-FS** has a simple structure. The main directory is named **geofs-edu**, reflecting its educational inspiration. It is subdivided into three subdirectories: **assets**, **css**, and **js**. Additionally, there is an **index.html** file, which serves as the entry point for the web application.
 
-- The **assets** folder contains the aircraft models used in the game. Note: These models were sourced from other open-source projects on GitHub, as well as from various free, open-source resources available online.
+- The **assets** folder contains the aircraft models used in the game. Attribution and the Apache-2.0 license for the Cesium Air and Cesium Drone sample models are in `geofs-edu/assets/ATTRIBUTION.md` and `geofs-edu/assets/CESIUM-LICENSE.md`.
 - The **css** folder contains the **style.css** file, which handles the styling—such as the vibrant colors used for collision alerts and the display of essential flight information.
-- Finally, the **js** folder houses the core logic, including calculations, camera viewpoints, atmospheric physics (such as how an aircraft descends and gains speed when its nose is pointed downward), and the integration of the 3D globe.
+- Finally, the **js** folder houses the core logic, including calculations, camera viewpoints, atmospheric physics, cockpit visuals, and the integration of the 3D globe.
+
+The map uses OpenStreetMap tiles and the globe's attribution remains visible. Cesium World Terrain requires a valid Cesium ion access token; without one, the simulator still opens with the map but uses a flat globe.
 
 ## Technologies
 
@@ -18,3 +20,4 @@
 - CSS3
 - JavaScript
 - Vercel
+- CesiumJS
