@@ -1,16 +1,14 @@
 import { CONFIG } from "./config.js";
 
 export async function createViewer() {
-  const hasToken = Boolean(CONFIG.ionToken && !CONFIG.ionToken.startsWith("COLE"));
-  if (hasToken) Cesium.Ion.defaultAccessToken = CONFIG.ionToken;
+  const hasToken = !CONFIG.ionToken.startsWith("COLE");
+  Cesium.Ion.defaultAccessToken = CONFIG.ionToken;
 
   const opts = {
     animation: false, timeline: false, baseLayerPicker: false, geocoder: false, homeButton: false,
     sceneModePicker: false, navigationHelpButton: false, fullscreenButton: false, infoBox: false, selectionIndicator: false,
   };
-  opts.baseLayer = new Cesium.ImageryLayer(
-    new Cesium.OpenStreetMapImageryProvider({ url: "https://tile.openstreetmap.org/" })
-  );
+  if (!hasToken) opts.baseLayer = new Cesium.ImageryLayer(new Cesium.OpenStreetMapImageryProvider({ url: "https://tile.openstreetmap.org/" }));
   const viewer = new Cesium.Viewer("cesiumContainer", opts);
 
   let terrainOk = false;
@@ -24,8 +22,6 @@ export async function createViewer() {
   const scene = viewer.scene;
   scene.globe.depthTestAgainstTerrain = true;
   scene.globe.enableLighting = true;
-  scene.globe.terrainExaggeration = CONFIG.terrainExaggeration;
-  scene.globe.maximumScreenSpaceError = CONFIG.terrainScreenSpaceError;
   scene.fog.enabled = true;
   viewer.clock.currentTime = Cesium.JulianDate.fromIso8601(CONFIG.simTimeUtc);
   viewer.clock.shouldAnimate = false;
@@ -49,10 +45,7 @@ export class AircraftVisual {
     this.pose = new Cesium.Matrix4(); this.currentUrl = "";
     this.radius = 8; 
     this.orientationOffset = Cesium.Matrix4.IDENTITY;
-    this.loadId = 0;
     this._buildFallback();
-    this.cockpit = null;
-    this._buildCockpit();
   }
 
   _buildFallback() {
@@ -77,44 +70,7 @@ export class AircraftVisual {
     }
   }
 
-  _buildCockpit() {
-    const C = Cesium;
-    const r = this.radius;
-    const dark = C.Color.fromCssColorString("#17242b");
-    const trim = C.Color.fromCssColorString("#52636a");
-    const screen = C.Color.fromCssColorString("#48a9a0");
-    const glass = C.Color.fromCssColorString("#4386a8");
-    const shapes = [
-      { d: [r * 0.08, r * 0.78, r * 0.28], o: [r * 0.72, 0, -r * 0.1], c: dark },
-      { d: [r * 0.18, r * 0.82, r * 0.07], o: [r * 0.62, 0, r * 0.045], c: trim },
-      { d: [r * 0.65, r * 0.05, r * 0.1], o: [r * 0.7, -r * 0.38, 0], c: dark },
-      { d: [r * 0.65, r * 0.05, r * 0.1], o: [r * 0.7, r * 0.38, 0], c: dark },
-      { d: [r * 0.06, r * 0.05, r * 0.7], o: [r * 0.88, -r * 0.37, r * 0.2], c: trim },
-      { d: [r * 0.06, r * 0.05, r * 0.7], o: [r * 0.88, r * 0.37, r * 0.2], c: trim },
-      { d: [r * 0.025, r * 0.16, r * 0.12], o: [r * 0.675, -r * 0.2, -r * 0.08], c: screen },
-      { d: [r * 0.025, r * 0.16, r * 0.12], o: [r * 0.675, r * 0.2, -r * 0.08], c: glass },
-      { d: [r * 0.025, r * 0.34, r * 0.035], o: [r * 0.57, 0, -r * 0.12], c: trim },
-      { d: [r * 0.1, r * 0.035, r * 0.16], o: [r * 0.52, 0, -r * 0.12], c: trim },
-    ];
-    const instances = shapes.map(({ d, o, c }) => new C.GeometryInstance({
-      geometry: C.BoxGeometry.fromDimensions({
-        dimensions: new C.Cartesian3(...d),
-        vertexFormat: C.PerInstanceColorAppearance.VERTEX_FORMAT,
-      }),
-      modelMatrix: C.Matrix4.fromTranslation(new C.Cartesian3(...o)),
-      attributes: { color: C.ColorGeometryInstanceAttribute.fromColor(c) },
-    }));
-
-    this.cockpit = this.scene.primitives.add(new C.Primitive({
-      geometryInstances: instances,
-      appearance: new C.PerInstanceColorAppearance({ translucent: false, closed: true }),
-      asynchronous: false,
-      show: this.hiddenCockpit,
-    }));
-  }
-
   async load(url) {
-    const loadId = ++this.loadId;
     this.currentUrl = url;
     this.modelReady = false;
     if (this.model) {
@@ -130,32 +86,24 @@ export class AircraftVisual {
     const hpr = new Cesium.HeadingPitchRoll(h, p, r);
     this.orientationOffset = Cesium.Matrix4.fromRotationTranslation(Cesium.Matrix3.fromHeadingPitchRoll(hpr));
     this.radius = offsetCfg.radius || 10;
-    if (this.cockpit) this.scene.primitives.remove(this.cockpit);
-    this._buildCockpit();
 
     try {
       const scale = offsetCfg.scale ?? CONFIG.modelScale;
       const model = await Cesium.Model.fromGltfAsync({ url, scale });
-      if (loadId !== this.loadId) return false;
       this.scene.primitives.add(model);
       model.errorEvent.addEventListener((e) => { console.warn("Erro no modelo:", e); this._showFallback(true); });
       model.readyEvent.addEventListener(() => { this.modelReady = true; this._showFallback(false); });
       this.model = model;
       console.info("Modelo 3D carregado de", url);
       return true;
-    } catch (e) {
-      if (loadId !== this.loadId) return false;
+    } catch (e) { 
       console.warn("Modelo indisponível:", url, e); 
       this._showFallback(true);
       return false; 
     }
   }
   _showFallback(on) { this.parts.forEach((p) => (p.prim.show = on && !this.hiddenCockpit)); if (this.model) this.model.show = !on && !this.hiddenCockpit; }
-  setHiddenForCockpit(h) {
-    this.hiddenCockpit = h;
-    this._showFallback(!this.modelReady);
-    if (this.cockpit) this.cockpit.show = h;
-  }
+  setHiddenForCockpit(h) { this.hiddenCockpit = h; this._showFallback(!this.modelReady); }
 
   setPose(position, rot) {
     Cesium.Matrix4.fromRotationTranslation(rot, position, this.pose);
@@ -165,6 +113,5 @@ export class AircraftVisual {
     for (const p of this.parts) {
       Cesium.Matrix4.multiply(this.pose, p.offset, p.prim.modelMatrix);
     }
-    if (this.cockpit) Cesium.Matrix4.clone(this.pose, this.cockpit.modelMatrix);
   }
 }

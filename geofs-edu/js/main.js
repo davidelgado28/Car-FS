@@ -9,8 +9,8 @@ import { HUD } from "./hud.js";
 (async function boot() {
   const { viewer, terrainOk, hasToken } = await createViewer();
   const banner = document.getElementById("banner");
-  if (!hasToken) { banner.style.display = "block"; banner.textContent = "Mapa OpenStreetMap ativo; terreno 3D indisponível sem um token válido do Cesium ion."; }
-  else if (!terrainOk) { banner.style.display = "block"; banner.textContent = "Não foi possível carregar o terreno 3D do Cesium ion (verifique o token)."; }
+  if (!hasToken) { banner.style.display = "block"; banner.textContent = "Sem token do Cesium ion: usando mapa OpenStreetMap e terreno plano (edite js/config.js)."; }
+  else if (!terrainOk) { banner.style.display = "block"; banner.textContent = "Não foi possível carregar o World Terrain (verifique o token)."; }
 
   const visual = new AircraftVisual(viewer.scene);
   const planeSelect = document.getElementById("plane-select");

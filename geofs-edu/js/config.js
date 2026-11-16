@@ -18,12 +18,7 @@ export const CONFIG = {
     "assets/A380.glb": { yaw: 90, pitch: 0, roll: 0, scale: 0.415, radius: 45.1 },
     "assets/B737.glb": { yaw: 90, pitch: 0, roll: 0, scale: 1.0,   radius: 20.9 },
     "assets/B787.glb": { yaw: 90, pitch: 0, roll: 0, scale: 1.0,   radius: 33.0 },
-    "assets/Cesium_Air.glb": { yaw: 90, pitch: 0, roll: 0, scale: 1.0, radius: 17 },
-    "assets/CesiumDrone.glb": { yaw: 90, pitch: 0, roll: 0, scale: 8.0, radius: 8 },
   },
-
-  terrainExaggeration: 1.35,
-  terrainScreenSpaceError: 1.5,
 
   camera: {
     chaseBack: 22,
