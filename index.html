@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>CarFS - Simulador de voo</title>
+  <link rel="stylesheet" href="https://cesium.com/downloads/cesiumjs/releases/1.123/Build/Cesium/Widgets/widgets.css" />
+  <link rel="stylesheet" href="css/style.css" />
+  <script src="https://cesium.com/downloads/cesiumjs/releases/1.123/Build/Cesium/Cesium.js"></script>
+</head>
+<body>
+  <div id="cesiumContainer"></div>
+  <div id="loading">Carregando globo e terreno…</div>
+  <div id="banner"></div>
+  <div id="warn"></div>
+  <div id="cammode"></div>
+  <div id="help">
+    <b>Controles</b> <small>(H oculta)</small><br />
+    ↑/↓ profundor (↓ = puxa, nariz sobe) · ←/→ ailerons<br />
+    Q/E leme · W/S motor · B ou Espaço freio<br />
+    F/V flaps · T/G compensador (trim)<br />
+    C câmera (Externa → Cockpit → Livre → Fly-by) · 1-4 modo direto<br />
+    Mouse: arraste p/ orbitar ou olhar · roda/pinça p/ zoom<br />
+    P pausa · R reiniciar
+  </div>
+  <div id="aircraft-selector">
+    <label for="plane-select"><b>Aeronave:</b></label>
+    <select id="plane-select">
+      <option value="assets/A318.glb">Airbus A318</option>
+      <option value="assets/A319.glb">Airbus A319</option>
+      <option value="assets/A320.glb" selected>Airbus A320</option>
+      <option value="assets/A321.glb">Airbus A321</option>
+      <option value="assets/A350.glb">Airbus A350</option>
+      <option value="assets/A380.glb">Airbus A380</option>
+      <option value="assets/B737.glb">Boeing 737</option>
+      <option value="assets/B787.glb">Boeing 787</option>
+      <option value="assets/DassaultMirage.glb">Dassault Mirage</option>
+    </select>
+  </div>
+  <div id="hud">
+    <div class="inst ai"><div id="ai-horizon"></div><div class="ai-plane"></div></div>
+    <div class="inst"><label>VELOC. (kt)</label><b id="ias">0</b><small>TAS <span id="tas">0</span> kt</small></div>
+    <div class="inst"><label>ALTITUDE (ft)</label><b id="alt-ft">0</b><small><span id="alt-m">0</span> m · AGL <span id="agl">0</span> ft</small></div>
+    <div class="inst"><label>VARIÔMETRO (ft/min)</label><b id="vs">0</b></div>
+    <div class="inst">
+      <label>RUMO</label>
+      <div class="compass"><div id="rose"></div><div class="lubber"></div></div>
+      <b id="hdg">000°</b>
+    </div>
+    <div class="inst"><label>POTÊNCIA</label><b id="thr">0%</b>
+      <div class="bar"><div id="thr-bar"></div></div>
+      <small>FLAPS <span id="flaps">0°</span> · TRIM <span id="trim">0</span></small>
+    </div>
+  </div>
+  <script type="module" src="js/main.js"></script>
+</body>
+</html>
