@@ -1,20 +1,19 @@
 # Car-FS
 
-**Car-FS** is an online flight simulator that runs directly in your web browser. Inspired by **Geo-FS**, it is built with a fully open-source approach. It features straightforward mechanics: it imports a JavaScript package containing a 3D model of the entire Earth, rendering the environment while maintaining a consistent **60 FPS**. It is hosted on Vercel and is compatible with any web browser.
+**Car-FS** is an online flight simulator that runs directly in your web browser, with no downloads or installations required. Inspired by the popular **Geo-FS**, it was built with a fully open-source spirit at its core.
 
----
+The concept is simple and straightforward: the project imports a JavaScript package featuring a 3D model of the entire Earth and renders the environment smoothly at a consistent **60 FPS**. Hosted on Vercel, it lets you take off right away from any modern web browser without any hassle.
 
-## Software Engineering
+## How the Project is Organized
 
-**Car-FS** has a simple structure. The main directory—named **geofs-edu**, reflecting its educational inspiration—is subdivided into three subdirectories: **assets**, **css**, and **js**. Additionally, there is an **index.html** file, which serves as the entry point for the web application.
+The architecture of **Car-FS** was designed to be clean and easy to navigate. The root directory is named **geofs-edu**, a nod to its educational purpose, and starts with **index.html**, which serves as the entry point for the application. From there, everything is organized into three main folders:
 
-- The **assets** folder contains the aircraft models used in the game. Note: These models were sourced from other open-source projects on GitHub, as well as from various free, open-source resources available online.
-- The **css** folder contains the **style.css** file, which handles the styling—such as the vibrant colors used for collision alerts and the display of essential flight information.
-- Finally, the **js** folder houses the core logic, including calculations, camera viewpoints, atmospheric physics (such as how an aircraft descends and gains speed when its nose is pointed downward), and the integration of the 3D globe.
+* **assets:** This is where the 3D aircraft models live. To bring the simulator to life, these models were gathered from other open-source GitHub repositories and free community resources online.
+* **css:** Holds the **style.css** file, which handles the visual side of the interface. It takes care of everything from displaying essential flight data clearly to lighting up the screen with vibrant colors during collision alerts.
+* **js:** The true brain behind the simulator. This folder houses all the math calculations, camera viewpoints, 3D globe integration, and atmospheric physics, such as how an aircraft naturally gains speed when pitching its nose downward.
 
-## Technologies
-
-- HTML5
-- CSS3
-- JavaScript
-- Vercel
+## Technologies Used
+* HTML5
+* CSS3
+* JavaScript
+* Vercel
